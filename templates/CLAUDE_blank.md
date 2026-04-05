@@ -1,20 +1,16 @@
 # [Project Name]
 
 <!--
-  FILE NAMING: This file is named CLAUDE_blank.md to distinguish it from other
-  templates in claude-lab/templates/. When copying to a project, rename it to
-  CLAUDE.md — the "_blank" suffix must be removed for Claude Code to load it.
+  FILE NAMING: This file is named CLAUDE_blank.md to distinguish it from other templates in claude-lab/templates/. When copying to a project, rename it to CLAUDE.md — the "_blank" suffix must be removed for Claude Code to load it.
 
-  CLAUDE.md — Project Memory
+  CLAUDE.md: Project Memory
   
   This file is loaded into Claude's context at the start of every session.
-  It is context, not enforced configuration — specificity and brevity directly
-  affect how consistently Claude follows it.
+  It is context, not enforced configuration. Specificity and brevity directly affect how consistently Claude follows it.
   
   Target: under 200 lines. If it grows beyond that, split using .claude/rules/.
   Rule of thumb: write what Claude cannot discover by reading your code.
-  Delete any section that doesn't apply — a shorter, focused file outperforms
-  a long one with half the fields left as placeholders.
+  Delete any section that doesn't apply — a shorter, focused file outperforms a long one with half the fields left as placeholders.
   
   This template is maintained in claude-lab/templates/
 -->
@@ -25,15 +21,14 @@
 
 <!--
   2–4 sentences. What does this codebase do? Who uses it? What problem does it solve?
-  Not a README — Claude doesn't need the marketing pitch. It needs enough context
-  to understand decisions it will encounter in the code.
+  Not a README. Claude doesn't need the marketing pitch. It needs enough context to understand decisions it will encounter in the code.
 -->
 
 [Description]
 
 **Primary language(s):** [e.g. Python 3.11 / TypeScript 5 / Java 17]  
 **Framework(s):** [e.g. FastAPI / Next.js / Spring Boot]  
-**Deployment target:** [e.g. AWS EKS / Azure / on-prem]
+**Deployment target:** [e.g. AWS EKS / Azure / on-prem technologies]
 
 ---
 
@@ -59,11 +54,10 @@
 
 <!--
   This is the highest-value section. Document WHY, not WHAT.
-  Claude can read what the code does. It cannot read why a decision was made,
-  or why the "obvious" refactor would break something.
+  Claude can read what the code does. It cannot read why a decision was made, or why the "obvious" refactor would break something.
   
   Examples of what belongs here:
-  - "We use X pattern for Y — do not replace with Z even if it looks redundant"
+  - "We use X pattern for Y. Do not replace with Z even if it looks redundant"
   - "Service A is deprecated; new code must use Service B"
   - "Authentication is handled by middleware X; never add auth logic to controllers"
   
@@ -82,10 +76,9 @@
   The more specific, the more reliably it is followed.
   
   Examples:
-  - "Do not commit directly to main — all changes via PR"
-  - "Do not use console.log in production code — use the logger at src/lib/logger.ts"
+  - "Do not use console.log use the logger at src/lib/logger.ts"
   - "Do not install packages without updating docs/dependencies.md"
-  - "Do not refactor [X] — it has a known issue tracked in ticket #NNN"
+  - "Do not refactor [X], it has a known issue tracked in ticket #NNN"
 -->
 
 - [Constraint]
@@ -112,7 +105,7 @@
   common usage. Without this, Claude will use the common interpretation.
   
   Examples:
-  - "Member" ≠ "User" — a User has an account; a Member has a linked subscription
+  - "Member" ≠ "User": a User has an account; a Member has a linked subscription
   - "Policy" means insurance policy object, not a permission policy
   - "Event" in this codebase refers to [X], not a DOM event or calendar event
 -->
@@ -151,7 +144,7 @@
 ## Git and PR workflow
 
 <!--
-  Delete if your team follows standard conventions with no exceptions.
+  Delete if your project follows standard conventions with no exceptions.
   Only document what differs or what Claude gets wrong.
 -->
 
