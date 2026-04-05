@@ -1,8 +1,6 @@
 # Claude Code: Developer Reference Guide
 
 > **Source**: Verified against official Claude Code documentation (code.claude.com/docs). April 2026.  
-> Developer-focused version. Covers configuration, hooks, agents, and context management for individual contributors and small teams. For enterprise deployment (managed policies, org-wide hooks, compliance), see the full professional guide.
-
 ---
 
 ## 1. What Claude Code Is
@@ -21,7 +19,7 @@ The extension stack, in order of introduction:
 | **Hooks** | Shell commands, HTTP calls, or LLM prompts that fire at lifecycle events | `settings.json` |
 | **Plugins** | Bundled, shareable configurations: commands + agents + skills + hooks + MCP | `.claude-plugin/plugin.json` |
 
----
+
 
 ## 2. Memory: CLAUDE.md and Auto Memory
 
@@ -29,7 +27,7 @@ Claude Code has two distinct memory mechanisms. Both are loaded at session start
 
 ### 2.1 CLAUDE.md Files (You Write)
 
-Plain markdown files that give Claude persistent context. Claude treats them as **context, not enforced configuration** — specificity and brevity directly affect adherence.
+Plain markdown files that give Claude persistent context. Claude treats them as **context, not enforced configuration** specificity and brevity directly affect adherence.
 
 **Location hierarchy** (more specific overrides broader):
 
@@ -64,7 +62,7 @@ Use plan mode for changes under `src/billing/`.
 
 **Run `/init`** to generate a starting CLAUDE.md from your codebase. Set `CLAUDE_CODE_NEW_INIT=1` for an interactive multi-phase flow.
 
----
+
 
 ### 2.2 Auto Memory (Claude Writes)
 
@@ -78,11 +76,12 @@ Claude can write its own notes based on corrections and preferences you give dur
 **Use CLAUDE.md for** deliberate standards, architecture, workflows.  
 **Let auto memory handle** build commands, debugging insights, preferences Claude discovers from your corrections.
 
----
+
 
 ## 3. Hooks: Deterministic Lifecycle Automation
 
-Hooks are the most powerful and most misrepresented Claude Code feature. They are **deterministic** — they run every time, unlike CLAUDE.md instructions which Claude may follow inconsistently. Use them for rules that must not be optional.
+Hooks are the most powerful and most misrepresented Claude Code feature. They are **deterministic**. They run every time, unlike CLAUDE.md instructions which Claude may follow inconsistently. Use them for rules that must not be optional.
+
 
 ### 3.1 Four Hook Types
 
@@ -93,6 +92,7 @@ Hooks are the most powerful and most misrepresented Claude Code feature. They ar
 | `prompt` | Single-turn LLM evaluation | Nuanced content checks that need reasoning |
 | `agent` | Subagent with tool access (Read, Grep, Glob) | Contextual verification that requires codebase inspection |
 
+
 ### 3.2 Hook Locations and Scope
 
 | Location | Scope | Committed to repo? |
@@ -102,6 +102,7 @@ Hooks are the most powerful and most misrepresented Claude Code feature. They ar
 | `.claude/settings.local.json` | This project | No (gitignored) |
 | Plugin `hooks/hooks.json` | When plugin is enabled | Yes, bundled with plugin |
 | Skill or agent frontmatter | While that component is active | Yes |
+
 
 ### 3.3 Complete Hook Event Reference
 
@@ -153,6 +154,7 @@ Events are listed in lifecycle order:
 | `Elicitation` | When MCP server requests user input | Yes (respond programmatically) |
 | `ElicitationResult` | After user responds to MCP elicitation | Yes (override response) |
 
+
 ### 3.4 Hook Configuration Schema
 
 ```json
@@ -202,6 +204,7 @@ Events are listed in lifecycle order:
 **PreToolUse `permissionDecision` values**: `allow` | `deny` | `ask` | `defer`  
 When multiple PreToolUse hooks return different decisions: `deny` > `defer` > `ask` > `allow`
 
+
 ### 3.5 Matcher Patterns
 
 The `matcher` field is a **regex** string. Examples:
@@ -219,6 +222,7 @@ For tool events, add an `if` field on individual handlers for finer matching:
 `"Bash(git *)"` → only git commands  
 `"Edit(*.ts)"` → only TypeScript files
 
+
 ### 3.6 Environment Variables in Hooks
 
 `SessionStart`, `CwdChanged`, and `FileChanged` hooks have access to `$CLAUDE_ENV_FILE`. Variables written here persist into all subsequent Bash commands for the session:
@@ -235,7 +239,7 @@ fi
 - `${CLAUDE_PLUGIN_ROOT}` — plugin installation directory
 - `${CLAUDE_PLUGIN_DATA}` — plugin persistent data directory
 
----
+
 
 ## 4. MCP Servers: External Connections
 
@@ -266,7 +270,8 @@ MCP (Model Context Protocol) is an open standard for connecting Claude to extern
 }
 ```
 
-**Always use environment variable interpolation for secrets** — never hardcode tokens in `.mcp.json`.
+**Always use environment variable interpolation for secrets**, never hardcode tokens in `.mcp.json`.
+
 
 ### 4.2 MCP Tool Permissions
 
@@ -284,6 +289,7 @@ MCP tools require **explicit permission** before Claude can use them. Use `allow
 
 `permissionMode: "acceptEdits"` does **not** auto-approve MCP tools — it only covers file edits and filesystem Bash commands. Use `allowedTools` instead.
 
+
 ### 4.3 Security Considerations for MCP
 
 Real CVEs have been filed against MCP server implementations (CVE-2025-68143, CVE-2025-68144, CVE-2025-68145 against `mcp-server-git`). Lessons that generalise:
@@ -293,22 +299,12 @@ Real CVEs have been filed against MCP server implementations (CVE-2025-68143, CV
 - **Familiar tools are not automatically safe wrappers**: Git/filesystem tools exposed via MCP inherit the attack surface of the underlying system.
 - **Scope MCP configs appropriately**: `.mcp.json` at project scope is shareable; move sensitive auth to `.claude/settings.local.json` or environment variables.
 
-### 4.4 Well-Known MCP Servers
 
-| Server | Purpose |
-|---|---|
-| GitHub | PRs, issues, repos |
-| JIRA/Linear | Ticket workflows |
-| Slack | Notifications, search |
-| PostgreSQL | Direct database queries |
-| Playwright | Browser automation |
-| Filesystem | Scoped file access |
-
----
 
 ## 5. Skills: Reusable Instruction Packages
 
-Skills are markdown files with frontmatter that give Claude specialised knowledge or behaviour for specific task types. They activate on task match (not automatically — Claude or the user triggers them).
+Skills are markdown files with frontmatter that give Claude specialised knowledge or behaviour for specific task types. They activate on task match (not automatically Claude or the user triggers them).
+
 
 ### 5.1 Structure
 
@@ -320,6 +316,7 @@ Skills are markdown files with frontmatter that give Claude specialised knowledg
     ├── references/     # Docs loaded on demand
     └── assets/         # Templates and static files
 ```
+
 
 ### 5.2 SKILL.md frontmatter
 
@@ -338,11 +335,12 @@ hooks:
 
 Skills can define their own hooks, scoped to when the skill is active. Use `once: true` on a hook handler to run it only once per session.
 
----
+
 
 ## 6. Subagents: Parallel Isolated Work
 
 Subagents are specialised Claude instances that run in their **own context window**, preventing context pollution in the main session. They return a summary rather than dragging all their intermediate work back up.
+
 
 ### 6.1 Agent Definition (`.claude/agents/`)
 
@@ -362,6 +360,7 @@ You are a security expert. Your responsibilities:
 Always provide: severity rating, specific line references, remediation steps.
 ```
 
+
 ### 6.2 Spawning Subagents
 
 Subagents are spawned via the **Agent tool** during a session, not via static configuration at startup. You can also use `claude --agent <name>` from the CLI to start a session with a specific agent active.
@@ -370,15 +369,17 @@ Subagents are spawned via the **Agent tool** during a session, not via static co
 - Default: subagent runs in the main working directory
 - `isolation: "worktree"` — subagent gets its own git worktree (useful for parallel branches)
 
+
 ### 6.3 Context Budget Awareness
 
-"Claude drifted" complaints are often **context budget complaints**. Anthropic's docs note that as the context fills — conversation history, file reads, CLAUDE.md, auto memory, loaded skills, system instructions — Claude compacts automatically. Older tool outputs are cleared first, then conversation is summarised. Use subagents proactively for heavy computational tasks to keep the main context clean.
+"Claude drifted" complaints are often **context budget complaints**. Anthropic's docs note that as the context fills conversation history, file reads, CLAUDE.md, auto memory, loaded skills, system instructions,... Claude compacts automatically. Older tool outputs are cleared first, then conversation is summarised. Use subagents proactively for heavy computational tasks to keep the main context clean.
 
----
+
 
 ## 7. Plugins: Shareable Configuration Bundles
 
 Plugins package multiple Claude Code components for distribution across teams or projects.
+
 
 ### 7.1 Plugin Structure
 
@@ -397,7 +398,7 @@ plugin-name/
 
 Plugins are the right unit of distribution when you want consistent tooling enforced across a team without every developer maintaining their own `.claude/` directory.
 
----
+
 
 ## 8. Settings Files: Permissions and Configuration
 
@@ -408,6 +409,7 @@ Plugins are the right unit of distribution when you want consistent tooling enfo
 .claude/settings.json            # Project (shareable)
 .claude/settings.local.json      # Project (personal, gitignored)
 ```
+
 
 ### 8.2 Key settings.json Structure
 
@@ -429,6 +431,7 @@ Plugins are the right unit of distribution when you want consistent tooling enfo
 }
 ```
 
+
 ### 8.3 Permission Modes
 
 | Mode | Behaviour |
@@ -440,7 +443,7 @@ Plugins are the right unit of distribution when you want consistent tooling enfo
 | `dontAsk` | Skips most prompts |
 | `bypassPermissions` | No permission checks (use only in sandboxed environments) |
 
----
+
 
 ## 9. Context Management
 
@@ -456,9 +459,9 @@ Plugins are the right unit of distribution when you want consistent tooling enfo
 `/clear` wipes everything and starts a fresh session from CLAUDE.md only.  
 Use `/compact` when mid-task continuity matters; `/clear` when switching to an unrelated task.
 
-**`PreCompact` and `PostCompact` hooks** let you react to compaction events — e.g., logging the generated summary, updating external state, or injecting additional context post-compaction.
+**`PreCompact` and `PostCompact` hooks** let you react to compaction events e.g., logging the generated summary, updating external state, or injecting additional context post-compaction.
 
----
+
 
 ## 10. A CLAUDE.md Template That Actually Works
 
@@ -466,7 +469,7 @@ The goal is not to list your tech stack (Claude can read your files). The goal i
 
 See `templates/CLAUDE.md.template` in this repo for a ready-to-copy version.
 
----
+
 
 ## 11. Getting Started (Verified Steps)
 
@@ -499,20 +502,3 @@ claude --resume <session-id>
 claude --agent security-auditor
 ```
 
----
-
-## 12. What Doesn't Exist (Common Misinformation)
-
-For completeness, features often cited online that are **not real**:
-
-| Claimed feature | Reality |
-|---|---|
-| `PostToolLive` hook | Does not exist. The hook is `PostToolUse`. |
-| `SessionSmt` hook | Does not exist. Possibly a garbled `SessionStart`. |
-| Auto-activating skills by name | Skills activate via task match or explicit invocation, not automatic name detection. |
-| YAML agent definition files with `.yml` extension | Agent definitions are markdown files with YAML frontmatter, stored in `.claude/agents/`. |
-| SKILL.md as a built-in Claude Code feature | Skills are real, but the SKILL.md convention and auto-activation logic is primarily a community pattern built on top of the core feature — not a native spec. |
-
----
-
-*Maintained against: code.claude.com/docs — always verify against current docs before implementation.*
