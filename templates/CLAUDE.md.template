@@ -1,0 +1,86 @@
+# Project: [Name]
+
+<!--
+  CLAUDE.md template — derived from claude-lab/guides/claude-code-guide.md, section 10.
+
+  The goal is NOT to list your tech stack (Claude can read your files).
+  The goal is to communicate what Claude CANNOT discover from the code itself.
+
+  Instructions:
+  - Replace all [bracketed placeholders] with your project's specifics.
+  - Delete any section that doesn't apply.
+  - Target under 200 lines. Longer files reduce adherence.
+  - Use @path/to/file to import additional context (READMEs, key docs). Max depth: 5 hops.
+  - HTML comments like this one are stripped from Claude's context but visible to humans.
+-->
+
+## Non-obvious architecture decisions
+
+<!--
+  List decisions Claude might "helpfully" undo if it doesn't know the reason behind them.
+  Examples: middleware patterns, deprecated service boundaries, mandated abstractions.
+-->
+
+- [Authentication is handled by middleware X; never add auth logic to controllers directly.]
+- [We use Y pattern for Z — do not replace with the "obvious" alternative even if it looks redundant.]
+- [Service A is deprecated; new code must use Service B.]
+
+## Known issues and active workarounds
+
+<!--
+  Flag anything Claude should not touch because a fix is already in flight,
+  or because the "obvious" fix is known to be wrong.
+-->
+
+- [`foo()` in `src/utils/legacy.ts` has a race condition under load. Do not refactor it — ticket #1234 is open.]
+- [Tests in `tests/integration/payments/` require a running local PostgreSQL. See `docker-compose.local.yml`.]
+
+## Decisions made and why
+
+<!--
+  Record choices that were deliberate and might look wrong to an AI reading the code cold.
+  Link to ADRs where they exist.
+-->
+
+- [We chose Library X over Y because of Z. If you are tempted to switch, read `docs/adr/002-library-choice.md` first.]
+
+## What not to do
+
+<!--
+  Hard constraints. Be specific enough that "I didn't know" is not a valid response.
+-->
+
+- Do not commit directly to `main`. All changes via PR.
+- [Do not add `console.log` to production code; use the structured logger at `src/lib/logger.ts`.]
+- [Do not install new packages without updating `docs/dependencies.md`.]
+
+## Build and test
+
+<!--
+  Exact commands. Claude uses these to verify its own work.
+-->
+
+- `[npm run build]` — full build
+- `[npm test]` — unit tests only
+- `[npm run test:integration]` — requires local services (see above)
+- `[npm run lint]` — must pass before PR
+
+## Naming conventions
+
+<!--
+  Only list conventions that differ from language defaults or that Claude gets wrong.
+-->
+
+- [React components: PascalCase]
+- [API handlers: `handle[Verb][Resource]` (e.g., `handleCreateUser`)]
+- [Database models: snake_case]
+
+## Domain glossary
+
+<!--
+  Terms that mean something specific in this codebase, different from their everyday meaning.
+  Claude cannot infer these from code alone.
+-->
+
+- ["Member" ≠ "User". A User has an account; a Member has a subscription linked to a policy.]
+- ["Policy" refers to the insurance policy object, not a permission policy.]

@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encdata
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# GitHub Copilot
+.github/copilot-instructions-local.md
+.copilotignore.local
+
+# Claude Code
+.claude/settings.local.json
+*.local.md
