@@ -35,8 +35,7 @@
 ## Build and test commands
 
 <!--
-  Be exact. Claude will run these. Vague instructions produce wrong commands.
-  Include prerequisites if a command requires local services, specific env vars, etc.
+  Be exact. Claude will run these. Vague instructions produce wrong commands. Include prerequisites if a command requires local services, specific env vars, etc.
 -->
 
 | Task | Command | Notes |
@@ -144,8 +143,7 @@
 ## Git and PR workflow
 
 <!--
-  Delete if your project follows standard conventions with no exceptions.
-  Only document what differs or what Claude gets wrong.
+  Delete if your project follows standard conventions with no exceptions. Only document what differs or what Claude gets wrong.
 -->
 
 - Branch naming: [e.g. `feat/`, `fix/`, `chore/`]
