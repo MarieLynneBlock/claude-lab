@@ -31,8 +31,6 @@ The full reference. Covers:
 - Skills, subagents, plugins
 - Settings files and permission modes
 - Context management
-- Enterprise deployment checklist
-- A catalogue of features that don't exist but are commonly cited
 
 ### [claude-code-developer-guide.md](guides/claude-code-developer-guide.md)
 
