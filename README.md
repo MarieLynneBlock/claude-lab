@@ -1,10 +1,7 @@
 # claude-lab
 
-Verified Claude Code resources, guides, and coaching materials. No hallucinations.
+Claude Code resources, guides, and coaching materials: things I experiment with, things that seem to work well,... 
 
-Everything here is derived from or verified against the official Claude Code documentation. If a feature is described, it exists. If something is missing, it either doesn't exist or hasn't been verified yet.
-
----
 
 ## What's here
 
@@ -28,8 +25,8 @@ claude-lab/
 The full reference. Covers:
 
 - What Claude Code actually is (and isn't)
-- CLAUDE.md and auto memory — how they load, how to write them effectively
-- Hooks — all four types, every lifecycle event, configuration schema, exit codes
+- CLAUDE.md and auto memory; how they load, how to write them effectively
+- Hooks: all four types, every lifecycle event, configuration schema, exit codes
 - MCP servers — configuration, permissions, security considerations
 - Skills, subagents, plugins
 - Settings files and permission modes
